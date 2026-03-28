@@ -87,13 +87,12 @@ function doLogin() {
   var u = document.getElementById('username').value.trim();
   var p = document.getElementById('password').value;
   if (!u || !p) { setStatus('Username dan password wajib diisi.', true); return; }
-  // Login sederhana: cocokkan user/pass bawaan. Bisa diubah ke server API kalau ada.
-  if (u === 'admin' && p === 'admin' || u && p) {
-    var role = (u === 'admin') ? 'admin' : 'user';
-    sessionStorage.setItem('simpulmas_auth', JSON.stringify({ username:u, role: role }));
+  // Hardcoded: admin/admin only
+  if (u === 'admin' && p === 'admin') {
+    sessionStorage.setItem('simpulmas_auth', JSON.stringify({ username: 'admin', role: 'admin' }));
     showMenu();
   } else {
-    setStatus('Login gagal. Periksa kembali username/password.', true);
+    setStatus('Username: admin, Password: admin', true);
   }
 }
 function showMenu() {

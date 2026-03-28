@@ -305,6 +305,7 @@
         <div class="tbr">
           <button id="refresh-btn" onclick="doRefreshPage()"><i class="fas fa-rotate-right"></i></button>
           <button id="vm-btn" onclick="toggleViewMode()" data-tip="Ganti Mode"><i id="vm-ico" class="fas fa-mobile-alt"></i></button>
+          <button id="back-main-btn" onclick="window.location.href='/';" style="margin-left:0.6rem;padding:0.45rem 0.7rem;border-radius:8px;border:none;background:#0969da;color:#fff;font-size:0.84rem;cursor:pointer;"><i class="fas fa-home"></i> Menu Utama</button>
           <div class="tb-acct" id="tb-acct" style="display:none">
             <div class="tb-av" id="tb-av">?</div>
             <div><div class="tb-un" id="tb-un">—</div><div class="tb-rl" id="tb-rl">—</div></div>
@@ -326,7 +327,7 @@
 </div>
 
 <!-- ═══════════════════════════════════════════════════
-     INIT APP — restore session + prefetch
+     INIT APP — restore session + prefetch (no login required)
      ═══════════════════════════════════════════════════ -->
 <script>
 (function(){
@@ -334,12 +335,14 @@
     var saved = sessionStorage.getItem('_slm');
     if (saved) {
       SES = JSON.parse(saved);
-      buildUI();
-      document.getElementById('lp').style.display = 'none';
-      document.getElementById('app').classList.add('on');
-      loadDashboard();
-      window._prefetchAll(); /* ← prefetch semua data di background setelah restore */
+    } else {
+      SES = { username:'Guest', role:'user', namaLengkap:'Linmas Ponorogo' };
     }
+    buildUI();
+    document.getElementById('lp').style.display = 'none';
+    document.getElementById('app').classList.add('on');
+    loadDashboard();
+    window._prefetchAll();
   } catch(e) {}
   applyViewMode();
 })();

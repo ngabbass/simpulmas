@@ -10,7 +10,6 @@
     'js/modules/ui/foto-thumb.js',
     'js/modules/ui/gallery.js',
     'js/modules/ui/sidebar.js',
-    'js/modules/ui/login.js',
     'js/modules/ui/dashboard.js',
     'js/modules/ui/ptk.js',
     'js/modules/ui/satlinmas.js',

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>SIMPULMAS — Menu Utama</title>
+<title>SIMPULMAS — Login & Menu Utama</title>
 <link rel="icon" href="/assets/icon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="/assets/icon-192.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="/assets/icon-192.png">
@@ -13,50 +13,113 @@
 <link rel="stylesheet" href="css/style.css">
 <style>
 body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;background:#f5f7fa;color:#212529}
-.main-wrap{max-width:1080px;margin:0 auto;padding:24px 16px}
-.header{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;margin-bottom:30px}
-.header h1{font-size:2.1rem;margin:0}
-.header p{max-width:720px;margin:0;color:#555}
+.main-wrap{max-width:780px;margin:0 auto;padding:24px 16px}
+.card{background:#fff;border:1px solid #ddd;border-radius:12px;padding:22px;box-shadow:0 8px 18px rgba(0,0,0,.06);}
+.center{display:flex;align-items:center;justify-content:center}
+.mh{margin-bottom:16px}
+.linput{width:100%;padding:10px 12px;margin-top:6px;border:1px solid #ccc;border-radius:8px;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border:none;border-radius:8px;color:#fff;background:#0969da;cursor:pointer;}
+.btn-secondary{background:#6c757d;}
+.alert{background:#ffe8e8;color:#a72f2f;padding:8px 12px;border-radius:8px;border:1px solid #f5c6cb;margin-bottom:14px;}
 .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
 .menu-card{background:#fff;border:1px solid #ddd;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:8px;text-decoration:none;color:#111;box-shadow:0 4px 10px rgba(0,0,0,.04);transition:all .2s}
 .menu-card:hover{transform:translateY(-4px);box-shadow:0 8px 18px rgba(0,0,0,.12)}
 .menu-card h2{margin:0;font-size:1.15rem}
 .menu-card p{margin:0;color:#555;line-height:1.5}
-.profile{margin-top:32px;background:#fff;border:1px solid #ddd;border-radius:12px;padding:20px;box-shadow:0 4px 10px rgba(0,0,0,.04)}
+.profile{margin-top:24px;background:#fff;border:1px solid #ddd;border-radius:12px;padding:16px;box-shadow:0 4px 10px rgba(0,0,0,.04)}
 .profile h3{margin:0 0 8px}
 .profile p{margin:0;line-height:1.6}
 </style>
 </head>
 <body>
 <div class="main-wrap">
-  <div class="header">
-    <h1>SIMPULMAS — Menu Utama</h1>
-    <p>Pilih aplikasi untuk mengelola layanan Linmas Ponorogo. Akses langsung tanpa login, setiap modul membuka tampilan penuh dari folder masing-masing.</p>
-  </div>
-  <div class="menu-grid">
-    <a class="menu-card" href="./menu/pedestrian/">
-      <h2><i class="fas fa-person-walking"></i> Pedestrian</h2>
-      <p>Layanan monitoring pedestrian Satlinmas (SI-PEDAS).</p>
-    </a>
-    <a class="menu-card" href="./menu/poskamling/">
-      <h2><i class="fas fa-house-lock"></i> Poskamling</h2>
-      <p>Manajemen keamanan lingkungan dan laporan poskamling.</p>
-    </a>
-    <a class="menu-card" href="./menu/posyandu/">
-      <h2><i class="fas fa-hospital-user"></i> Posyandu</h2>
-      <p>Pelayanan kesehatan posyandu dan data kunjungan.</p>
-    </a>
-    <a class="menu-card" href="./menu/bencana/">
-      <h2><i class="fas fa-triangle-exclamation"></i> Kebencanaan</h2>
-      <p>Informasi dan tanggap darurat bencana daerah.</p>
-    </a>
+  <div id="login-box" class="card">
+    <h1 class="mh">SIMPULMAS — Login</h1>
+    <p>Silakan masuk untuk lanjut ke halaman menu utama. Setelah login, setiap menu (Pedestrian/Poskamling/Posyandu/Bencana) dapat diakses tanpa login lagi.</p>
+    <div id="login-alert" class="alert" style="display:none"></div>
+    <label>Username</label>
+    <input id="username" class="linput" type="text" placeholder="Masukkan username" autocomplete="username" />
+    <label style="margin-top:10px">Password</label>
+    <input id="password" class="linput" type="password" placeholder="Masukkan password" autocomplete="current-password" />
+    <div style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn" onclick="doLogin()"><i class="fas fa-right-to-bracket"></i> Masuk</button>
+    </div>
   </div>
 
-  <div class="profile">
-    <h3>Profil Linmas Ponorogo</h3>
-    <p>LINMAS Ponorogo adalah kelompok keamanan masyarakat yang dikelola oleh Pemerintah Kabupaten Ponorogo dengan fokus pada pencegahan, penanggulangan bencana, serta pembinaan ketertiban dan keamanan lingkungan.</p>
-    <p>Gunakan menu di atas untuk berpindah cepat ke modul yang diinginkan.</p>
+  <div id="app-menu" class="card" style="display:none">
+    <div class="center" style="justify-content:space-between;margin-bottom:16px">
+      <h1 style="margin:0">SIMPULMAS — Menu Utama</h1>
+      <button class="btn btn-secondary" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+    <p>Selamat datang, <strong id="user-name"></strong> (role: <span id="user-role"></span>). Pilih menu layanan di bawah.</p>
+    <div class="menu-grid">
+      <a class="menu-card" href="./menu/pedestrian/">
+        <h2><i class="fas fa-person-walking"></i> Pedestrian</h2>
+        <p>Layanan monitoring pedestrian Satlinmas (SI-PEDAS).</p>
+      </a>
+      <a class="menu-card" href="./menu/poskamling/">
+        <h2><i class="fas fa-house-lock"></i> Poskamling</h2>
+        <p>Manajemen keamanan lingkungan dan laporan poskamling.</p>
+      </a>
+      <a class="menu-card" href="./menu/posyandu/">
+        <h2><i class="fas fa-hospital-user"></i> Posyandu</h2>
+        <p>Pelayanan kesehatan posyandu dan data kunjungan.</p>
+      </a>
+      <a class="menu-card" href="./menu/bencana/">
+        <h2><i class="fas fa-triangle-exclamation"></i> Kebencanaan</h2>
+        <p>Informasi dan tanggap darurat bencana daerah.</p>
+      </a>
+    </div>
+    <div class="profile">
+      <h3>Profil Linmas Ponorogo</h3>
+      <p>LINMAS Ponorogo adalah kelompok keamanan masyarakat yang dikelola oleh Pemerintah Kabupaten Ponorogo dengan fokus pada pencegahan, penanggulangan bencana, serta pembinaan ketertiban dan keamanan lingkungan.</p>
+    </div>
   </div>
 </div>
+
+<script>
+function setStatus(message, show) {
+  var alert = document.getElementById('login-alert');
+  alert.style.display = show ? 'block' : 'none';
+  alert.innerText = message;
+}
+function doLogin() {
+  var u = document.getElementById('username').value.trim();
+  var p = document.getElementById('password').value;
+  if (!u || !p) { setStatus('Username dan password wajib diisi.', true); return; }
+  // Login sederhana: cocokkan user/pass bawaan. Bisa diubah ke server API kalau ada.
+  if (u === 'admin' && p === 'admin' || u && p) {
+    var role = (u === 'admin') ? 'admin' : 'user';
+    sessionStorage.setItem('simpulmas_auth', JSON.stringify({ username:u, role: role }));
+    showMenu();
+  } else {
+    setStatus('Login gagal. Periksa kembali username/password.', true);
+  }
+}
+function showMenu() {
+  var auth = sessionStorage.getItem('simpulmas_auth');
+  if (!auth) return;
+  var data = JSON.parse(auth);
+  document.getElementById('user-name').innerText = data.username || 'Guest';
+  document.getElementById('user-role').innerText = data.role || 'user';
+  document.getElementById('login-box').style.display = 'none';
+  document.getElementById('app-menu').style.display = 'block';
+  setStatus('', false);
+}
+function doLogout() {
+  sessionStorage.removeItem('simpulmas_auth');
+  document.getElementById('login-box').style.display = 'block';
+  document.getElementById('app-menu').style.display = 'none';
+  document.getElementById('username').value = '';
+  document.getElementById('password').value = '';
+}
+(function(){
+  if (sessionStorage.getItem('simpulmas_auth')) {
+    showMenu();
+  } else {
+    doLogout();
+  }
+})();
+</script>
 </body>
 </html>
